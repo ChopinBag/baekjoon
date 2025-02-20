@@ -1,0 +1,1 @@
+{"name":"Local: 17199","url":"/Users/imseung-u/Documents/GitHub/baekjoon/unsolved/17199.py","tests":[{"id":1740030562483,"input":"3\n1 2\n3 2","output":"2"},{"id":1740031318126,"input":"5\n1 2\n2 5\n4 2\n3 1","output":"5"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"/Users/imseung-u/Documents/GitHub/baekjoon/unsolved/17199.py","group":"local","local":true}
