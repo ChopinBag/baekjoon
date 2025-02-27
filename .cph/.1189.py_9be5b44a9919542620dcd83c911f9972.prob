@@ -1,0 +1,1 @@
+{"name":"Local: 1189","url":"/Users/imseung-u/Documents/GitHub/baekjoon/1189.py","tests":[{"id":1740298350817,"input":"3 4 6\n. . . .\n. T . .\n. . . .","output":"4"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"/Users/imseung-u/Documents/GitHub/baekjoon/1189.py","group":"local","local":true}

@@ -1,19 +1,4 @@
 # come back home
-from collections import deque
-# Input
-# distance 는 지나가는 정점의 개수
-row, column, distance = map(int,input().split())
-# distance 를 이동 횟수로 변경
-distance -= 1 
-graph = []
-for i in range(row):
-    graph.append(list(input().split()))
-
-
-reversed_graph = []
-for i in range(row):
-    reversed_graph.append(graph[row-i-1])
-
 
 '''
 1. 방향을 설정
@@ -54,6 +39,7 @@ ex ) aaabb -> aaabbac / aaabbbd
 2. 추가 순서쌍 종류 결정
 순서쌍 = 2이면
 ac ac / ac bd / bd bd 3가지 중 하나
+a:0, b:1, c:2, d:3 지정
 식은 중복조합 함수 하나 만들어서 리스트에 저장
 
 3. 최종 이동방향 리스트 생성
@@ -67,6 +53,21 @@ a * (column-1) + b * (row-1) + 추가 순서쌍의 리스트 에서
 5.count 개수 출력
 '''
 
+
+# Input
+# distance 는 지나가는 정점의 개수
+row, column, distance = map(int,input().split())
+# distance 를 이동 횟수로 변경
+distance -= 1 
+graph = []
+for i in range(row):
+    graph.append(list(input().split()))
+
+
+reversed_graph = []
+for i in range(row):
+    reversed_graph.append(graph[row-i-1])
+
 # 중복조합 함수
 def comb(arr, r, start=0, path=[], result=[]):
     if len(path) == r:
@@ -79,4 +80,6 @@ def comb(arr, r, start=0, path=[], result=[]):
     return result
 
 count = 0
-move_count = (distance - row - column + 1) / 2
+move_count = (distance - row - column + 2) // 2
+add_move_list = comb([0,1,2,3], move_count) 
+
