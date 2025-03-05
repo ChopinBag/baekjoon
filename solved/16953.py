@@ -1,4 +1,4 @@
-a, b = map(int, input('A와 B 입력 : ').split())
+a, b = map(int, input().split())
 attempt = 0
 
 while b > a:
