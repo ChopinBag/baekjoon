@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <vector>
 #include <map>
+#include <string>
 
 using namespace std;
 
@@ -11,6 +12,7 @@ enum class Direction {
     LEFT,
     UP
 };
+
 
 class Snake{
     public:
@@ -25,6 +27,10 @@ class Snake{
         void setup(vector<vector<int>> &b, int size){
             b.assign(size, vector<int>(size, 0));
             b[0][0] = 1; // 뱀 머리의 첫번째 위치
+        }
+        void change_direction(Direction &d, int isD){
+            if(isD) d = static_cast<Direction>((static_cast<int>(d) + 1) % 4);
+            else d = static_cast<Direction>((static_cast<int>(d) + 3) % 4);
         }
 
     private:
@@ -51,6 +57,25 @@ int main(){
     for(int i=0;i<apple_num;++i){
         int row, col;
         cin >> row >> col;
-        board[row][col] = 1;
+        board[row - 1][col - 1] = 1;
+        // 사과의 위치 정보 설정
+    }
+
+    int direction_change;
+    cin >> direction_change;
+
+    vector<vector<int>> change_list;
+    change_list.assign(direction_change, vector<int>(2, 0));
+
+    for(int i=0;i<direction_change;++i){
+        int time;
+        string change;
+        cin >> time >> change;
+        change_list[i][0] = time;
+
+        if(change == "D") change_list[i][1] = 0; 
+        // 0 은 시계방향 -> Direction++
+        else change_list[i][0] = 1; 
+        // 1 은 반시계방향 -> Direction--
     }
 }
