@@ -16,12 +16,17 @@ enum class Direction {
 
 class Snake {
 public:
+    bool is_valid_;
+    int time_;
     Snake() = default;
-    Snake(Direction d = Direction::RIGHT, vector<vector<int>> body) 
+    Snake(Direction d , vector<vector<int>> body) 
     : dir_(d), body_(body) {}
 
     bool go_next(vector<vector<int>>& board) {
-        if(is_collide_body()||is_collide_wall())return false;
+        if(is_collide_body()||is_collide_wall()){
+            this->is_valid_ = false;
+            return false;
+        }
         
         if(this->dir_==Direction::RIGHT){
             if(board[head_.first][head_.second+1]==1){
@@ -66,6 +71,7 @@ public:
         this->board_size_ = size;
         this->head_ = {0,0};
         this->time_ = 0;
+        this->is_valid_ = true;
     }
 
     void change_direction(int isD) {
@@ -80,7 +86,6 @@ private:
     Direction dir_;
     int board_size_;
     pair<int,int> head_;
-    int time_;
 
     bool is_collide_wall(){
         if (this->dir_==Direction::RIGHT && this->head_.second==board_size_)return true;
@@ -98,16 +103,15 @@ private:
         else if(this->dir_==Direction::UP && this->body_[this->head_.first-1][this->head_.second]==1) return true;
         else return false;
     }
-
     
 };
 
 
 int main(){
     int board_size, apple_num;
-    cout << "Enter the size of board" << endl;
+    cout << "Enter the size of board: " << endl;
     cin >> board_size;
-    cout << "Enter the number of apples" << endl;
+    cout << "Enter the number of apples: " << endl;
     cin >> apple_num;
     
     vector<vector<int>> board;
@@ -119,26 +123,39 @@ int main(){
 
     for(int i=0;i<apple_num;++i){
         int row, col;
+        cout << "Enter the location of the apple #"<< i << endl;
         cin >> row >> col;
         board[row - 1][col - 1] = 1;
         // 사과의 위치 정보 설정
     }
 
     int direction_change;
+    cout << "Enter the number of direction information: " << endl;
     cin >> direction_change;
 
-    pair<int, int> change_list;
+    vector<pair<int, int>> change_list;
 
-    for(int i=0;i<direction_change;++i){
+    for(int i=0; i<direction_change; ++i){
         int time;
         string change;
+        cout << "Enter the direction information #"<< i << endl;
         cin >> time >> change;
-        change_list.second = time;
+        pair<int,int> temp_pair;
+        temp_pair.second = time;
 
-        if(change == "D") change_list.first = 0; 
+        if(change == "D") temp_pair.first = 0; 
         // 0 은 시계방향 -> Direction++
-        else change_list.first = 1; 
+        else temp_pair.first = 1; 
         // 1 은 반시계방향 -> Direction--
+        change_list.push_back(temp_pair);
     }
 
+    for(int i=0;i<direction_change;++i){
+        int j=0;
+        while(j++ < change_list[i].second && s.go_next(board)){;}
+        if(!s.is_valid_) break;
+        
+        s.change_direction(change_list[i].first);
+    }
+    cout << s.time_ << endl;
 }
