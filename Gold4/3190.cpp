@@ -17,15 +17,17 @@ enum class Direction {
 class Snake {
 public:
     Snake() = default;
-    Snake(Direction d = Direction::RIGHT) : dir_(d) {}
+    Snake(Direction d = Direction::RIGHT, vector<vector<int>> body) 
+    : dir_(d), body_(body) {}
 
     void go_next(const vector<vector<int>> board) {
         
     }
-
+    // 뱀의 머리는 2, 뱀의 몸통은 1, 빈공간은 0
     void setup(int size) {
         body_.assign(size, vector<int>(size));
-        body_.push_back({0, 0}); // 뱀의 첫번째 위치
+        body_[0][0] = 2; // 뱀의 첫번째 위치
+        this->board_size_ = size;
     }
 
     void change_direction(int isD) {
@@ -38,10 +40,34 @@ public:
 private:
     vector<vector<int>> body_; 
     Direction dir_;
+    int board_size_;
 
-    bool isCollide(){
-        if (dir_==Direction::RIGHT || )
+    bool is_collide_wall(){
+        if (dir_==Direction::RIGHT && any_of(body_.begin(),body_.end(),[](auto elem){
+            if(elem[board_size_]==2)return true;
+            else return false;
+        })) return true;
+        
+        else if (dir_==Direction::LEFT && any_of(body_.begin(),body_.end(),[](auto elem){
+            if(elem[0]==2)return true;
+            else return false;
+        })) return true;
+
+        else if (dir_==Direction::UP && any_of(body_[0].begin(),body_[0].end(),[](auto elem){
+            if(elem==2)return true;
+            else return false;
+        })) return true;
+
+        else if (dir_==Direction::DOWN && any_of(body_[board_size_].begin(),body_[board_size_].end(),[](auto elem){
+            if(elem==2)return true;
+            else return false;
+        })) return true;
+
+        else {
+            cout << "Error in <is_Collide_wall>" << endl;
+        }
     }
+
 };
 
 
@@ -54,10 +80,10 @@ int main(){
     
     vector<vector<int>> board;
     board.assign(board_size, vector<int>(board_size, 0));
-    vector<vector<int>> body_;
+    vector<vector<int>> body;
 
-    Snake s;
-    s.setup(body_, board_size);
+    Snake s(Direction::RIGHT, body);
+    s.setup(board_size);
 
     for(int i=0;i<apple_num;++i){
         int row, col;
