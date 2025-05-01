@@ -19,14 +19,13 @@ public:
     Snake() = default;
     Snake(Direction d = Direction::RIGHT) : dir_(d) {}
 
-    void go_next() {
-
+    void go_next(const vector<vector<int>> board) {
+        
     }
 
-    void setup(vector<vector<int>> &board, int size) {
-        board.assign(size, vector<int>(size, 0));
-        board[0][0] = 1; // Snake's initial position
-        body_.push_back({0, 0}); // Store the initial position of the snake's head
+    void setup(int size) {
+        body_.assign(size, vector<int>(size));
+        body_.push_back({0, 0}); // 뱀의 첫번째 위치
     }
 
     void change_direction(int isD) {
@@ -37,8 +36,12 @@ public:
     }
 
 private:
-    vector<pair<int, int>> body_; 
+    vector<vector<int>> body_; 
     Direction dir_;
+
+    bool isCollide(){
+        if (dir_==Direction::RIGHT || )
+    }
 };
 
 
