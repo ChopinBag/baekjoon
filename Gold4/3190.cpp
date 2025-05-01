@@ -14,29 +14,31 @@ enum class Direction {
 };
 
 
-class Snake{
-    public:
-        Snake() = default;
-        Snake(vector<vector<int>> &b,Direction d = Direction::RIGHT){
-            this->body = b;
-            this->dir = d;
-        };
-        void go_next(Direction d){
-            
-        }
-        void setup(vector<vector<int>> &b, int size){
-            b.assign(size, vector<int>(size, 0));
-            b[0][0] = 1; // 뱀 머리의 첫번째 위치
-        }
-        void change_direction(Direction &d, int isD){
-            if(isD) d = static_cast<Direction>((static_cast<int>(d) + 1) % 4);
-            else d = static_cast<Direction>((static_cast<int>(d) + 3) % 4);
-        }
+class Snake {
+public:
+    Snake() = default;
+    Snake(Direction d = Direction::RIGHT) : dir_(d) {}
 
-    private:
-        vector<vector<int>> body;
-        Direction dir;
-        
+    void go_next() {
+
+    }
+
+    void setup(vector<vector<int>> &board, int size) {
+        board.assign(size, vector<int>(size, 0));
+        board[0][0] = 1; // Snake's initial position
+        body_.push_back({0, 0}); // Store the initial position of the snake's head
+    }
+
+    void change_direction(int isD) {
+        if (isD) 
+            dir_ = static_cast<Direction>((static_cast<int>(dir_) + 1) % 4); // Clockwise
+        else 
+            dir_ = static_cast<Direction>((static_cast<int>(dir_) + 3) % 4); // Counter-clockwise
+    }
+
+private:
+    vector<pair<int, int>> body_; 
+    Direction dir_;
 };
 
 
@@ -49,10 +51,10 @@ int main(){
     
     vector<vector<int>> board;
     board.assign(board_size, vector<int>(board_size, 0));
-    vector<vector<int>> body;
+    vector<vector<int>> body_;
 
     Snake s;
-    s.setup(body, board_size);
+    s.setup(body_, board_size);
 
     for(int i=0;i<apple_num;++i){
         int row, col;
