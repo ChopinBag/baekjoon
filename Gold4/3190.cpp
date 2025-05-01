@@ -20,54 +20,86 @@ public:
     Snake(Direction d = Direction::RIGHT, vector<vector<int>> body) 
     : dir_(d), body_(body) {}
 
-    void go_next(const vector<vector<int>> board) {
+    bool go_next(vector<vector<int>>& board) {
+        if(is_collide_body()||is_collide_wall())return false;
         
+        if(this->dir_==Direction::RIGHT){
+            if(board[head_.first][head_.second+1]==1){
+                this->body_[head_.first][++head_.second] = 1;
+                board[head_.first][head_.second] = 0;
+            }else{
+                this->body_[head_.first][head_.second] = 0;
+                this->body_[head_.first][++head_.second] = 1;
+            }
+        } else if(this->dir_==Direction::DOWN){
+            if(board[head_.first+1][head_.second]==1){
+                this->body_[++head_.first][head_.second] = 1;
+                board[head_.first][head_.second] = 0;
+            }else{
+                this->body_[head_.first][head_.second] = 0;
+                this->body_[++head_.first][head_.second] = 1;
+            }
+        } else if(this->dir_==Direction::LEFT){
+            if(board[head_.first][head_.second-1]==1){
+                this->body_[head_.first][--head_.second] = 1;
+                board[head_.first][head_.second] = 0;
+            }else{
+                this->body_[head_.first][head_.second] = 0;
+                this->body_[head_.first][--head_.second] = 1;
+            }
+        } else if(this->dir_==Direction::UP){
+            if(board[head_.first-1][head_.second]==1){
+                this->body_[--head_.first][head_.second] = 1;
+                board[head_.first][head_.second] = 0;
+            }else{
+                this->body_[head_.first][head_.second] = 0;
+                this->body_[--head_.first][head_.second] = 1;
+            }
+        }  
+        this->time_++;
+        return true;
     }
-    // 뱀의 머리는 2, 뱀의 몸통은 1, 빈공간은 0
+    
     void setup(int size) {
-        body_.assign(size, vector<int>(size));
-        body_[0][0] = 2; // 뱀의 첫번째 위치
+        this->body_.assign(size, vector<int>(size));
+        this->body_[0][0] = 1; // 뱀의 첫번째 위치
         this->board_size_ = size;
+        this->head_ = {0,0};
+        this->time_ = 0;
     }
 
     void change_direction(int isD) {
-        if (isD) 
-            dir_ = static_cast<Direction>((static_cast<int>(dir_) + 1) % 4); // Clockwise
+        if (isD==0) 
+            this->dir_ = static_cast<Direction>((static_cast<int>(this->dir_) + 1) % 4); // Clockwise
         else 
-            dir_ = static_cast<Direction>((static_cast<int>(dir_) + 3) % 4); // Counter-clockwise
+            this->dir_ = static_cast<Direction>((static_cast<int>(this->dir_) + 3) % 4); // Counter-clockwise
     }
 
 private:
     vector<vector<int>> body_; 
     Direction dir_;
     int board_size_;
+    pair<int,int> head_;
+    int time_;
 
     bool is_collide_wall(){
-        if (dir_==Direction::RIGHT && any_of(body_.begin(),body_.end(),[](auto elem){
-            if(elem[board_size_]==2)return true;
-            else return false;
-        })) return true;
-        
-        else if (dir_==Direction::LEFT && any_of(body_.begin(),body_.end(),[](auto elem){
-            if(elem[0]==2)return true;
-            else return false;
-        })) return true;
+        if (this->dir_==Direction::RIGHT && this->head_.second==board_size_)return true;
+        else if (this->dir_==Direction::LEFT && this->head_.second==0)return true;
+        else if (this->dir_==Direction::DOWN && this->head_.first==board_size_)return true;
+        else if (this->dir_==Direction::UP && this->head_.first==0)return true;
 
-        else if (dir_==Direction::UP && any_of(body_[0].begin(),body_[0].end(),[](auto elem){
-            if(elem==2)return true;
-            else return false;
-        })) return true;
-
-        else if (dir_==Direction::DOWN && any_of(body_[board_size_].begin(),body_[board_size_].end(),[](auto elem){
-            if(elem==2)return true;
-            else return false;
-        })) return true;
-
-        else {
-            cout << "Error in <is_Collide_wall>" << endl;
-        }
+        else return false;
     }
 
+    bool is_collide_body(){
+        if(this->dir_==Direction::RIGHT && this->body_[this->head_.first][this->head_.second+1]==1) return true;
+        else if(this->dir_==Direction::LEFT && this->body_[this->head_.first][this->head_.second-1]==1) return true;
+        else if(this->dir_==Direction::DOWN && this->body_[this->head_.first+1][this->head_.second]==1) return true;
+        else if(this->dir_==Direction::UP && this->body_[this->head_.first-1][this->head_.second]==1) return true;
+        else return false;
+    }
+
+    
 };
 
 
@@ -95,18 +127,18 @@ int main(){
     int direction_change;
     cin >> direction_change;
 
-    vector<vector<int>> change_list;
-    change_list.assign(direction_change, vector<int>(2, 0));
+    pair<int, int> change_list;
 
     for(int i=0;i<direction_change;++i){
         int time;
         string change;
         cin >> time >> change;
-        change_list[i][0] = time;
+        change_list.second = time;
 
-        if(change == "D") change_list[i][1] = 0; 
+        if(change == "D") change_list.first = 0; 
         // 0 은 시계방향 -> Direction++
-        else change_list[i][0] = 1; 
+        else change_list.first = 1; 
         // 1 은 반시계방향 -> Direction--
     }
+
 }
