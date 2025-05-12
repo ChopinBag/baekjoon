@@ -2,7 +2,8 @@
     "files.associations": {
         "algorithm": "cpp",
         "vector": "cpp",
-        "utility": "cpp"
+        "utility": "cpp",
+        "iostream": "cpp"
     },
     "C_Cpp.default.compilerPath": "cl.exe"
 }
